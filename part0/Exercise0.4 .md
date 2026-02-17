@@ -30,10 +30,7 @@ Note right of browser: The server response is URL redirect so the page reloads t
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
     activate server
-    server-->>browser: [{
-        "content": "hi hi",
-        "date": "2026-02-16T12:49:03.960Z"
-    }, ... ]
+    server-->>browser: [{"content": "hi hi", "date": "2026-02-16T12:49:03.960Z"}, ... ]
     deactivate server
 
     Note right of browser: The callback function is executed by the browser, which then displays the notes.
