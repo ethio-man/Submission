@@ -25,8 +25,8 @@ const App = () => {
   );
 };
 
-function Header(props) {
-  return <h1>{props.name}</h1>;
+function Header({ course }) {
+  return <h1>{course.name}</h1>;
 }
 
 function Content(props) {
