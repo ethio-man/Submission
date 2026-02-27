@@ -29,20 +29,25 @@ const App = () => {
       </div>
 
       <h1>statistics</h1>
-      <div>
-        <Statistics text="good" feedBack={good} />
-        <Statistics text="neutral" feedBack={neutral} />
-        <Statistics text="bad" feedBack={bad} />
-        <Statistics text="all" feedBack={all} />
-        <Statistics
-          text="average"
-          feedBack={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
-        />
-        <Statistics
-          text="positive"
-          feedBack={`${all === 0 ? 0 : (good * 100) / all} $`}
-        />
-      </div>
+
+      {all === 0 ? (
+        <div>No feedback given</div>
+      ) : (
+        <div>
+          <Statistics text="good" feedBack={good} />
+          <Statistics text="neutral" feedBack={neutral} />
+          <Statistics text="bad" feedBack={bad} />
+          <Statistics text="all" feedBack={all} />
+          <Statistics
+            text="average"
+            feedBack={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
+          />
+          <Statistics
+            text="positive"
+            feedBack={`${all === 0 ? 0 : (good * 100) / all} %`}
+          />
+        </div>
+      )}
     </div>
   );
 };
