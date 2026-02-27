@@ -5,7 +5,6 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
   const [all, setAll] = useState(0);
-  const [average, setAverage] = useState(0);
 
   const handleGood = () => {
     setAll(all + 1);
@@ -31,15 +30,15 @@ const App = () => {
 
       <h1>statistics</h1>
       <div>
-        <FeedBack text="good" feedBack={good} />
-        <FeedBack text="neutral" feedBack={neutral} />
-        <FeedBack text="bad" feedBack={bad} />
-        <FeedBack text="all" feedBack={all} />
-        <FeedBack
+        <Statistics text="good" feedBack={good} />
+        <Statistics text="neutral" feedBack={neutral} />
+        <Statistics text="bad" feedBack={bad} />
+        <Statistics text="all" feedBack={all} />
+        <Statistics
           text="average"
           feedBack={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
         />
-        <FeedBack
+        <Statistics
           text="positive"
           feedBack={`${all === 0 ? 0 : (good * 100) / all} $`}
         />
@@ -51,7 +50,7 @@ const App = () => {
 const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
-const FeedBack = ({ text, feedBack }) => {
+const Statistics = ({ text, feedBack }) => {
   return <div>{`${text} ${feedBack}`}</div>;
 };
 
