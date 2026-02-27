@@ -33,20 +33,7 @@ const App = () => {
       {all === 0 ? (
         <div>No feedback given</div>
       ) : (
-        <div>
-          <Statistics text="good" feedBack={good} />
-          <Statistics text="neutral" feedBack={neutral} />
-          <Statistics text="bad" feedBack={bad} />
-          <Statistics text="all" feedBack={all} />
-          <Statistics
-            text="average"
-            feedBack={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
-          />
-          <Statistics
-            text="positive"
-            feedBack={`${all === 0 ? 0 : (good * 100) / all} %`}
-          />
-        </div>
+        <Statistics good={good} neutral={neutral} bad={bad} all={all} />
       )}
     </div>
   );
@@ -55,8 +42,26 @@ const App = () => {
 const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
-const Statistics = ({ text, feedBack }) => {
-  return <div>{`${text} ${feedBack}`}</div>;
+const Statistics = ({ good, neutral, bad, all }) => {
+  return (
+    <div>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine
+        text="average"
+        value={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
+      />
+      <StatisticLine
+        text="positive"
+        value={`${all === 0 ? 0 : (good * 100) / all} %`}
+      />
+    </div>
+  );
+};
+const StatisticLine = ({ text, value }) => {
+  return <div>{`${text} ${value}`}</div>;
 };
 
 export default App;
