@@ -42,26 +42,37 @@ const App = () => {
 const Button = ({ text, onClick }) => {
   return <button onClick={onClick}>{text}</button>;
 };
+
 const Statistics = ({ good, neutral, bad, all }) => {
   return (
     <div>
-      <StatisticLine text="good" value={good} />
-      <StatisticLine text="neutral" value={neutral} />
-      <StatisticLine text="bad" value={bad} />
-      <StatisticLine text="all" value={all} />
-      <StatisticLine
-        text="average"
-        value={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
-      />
-      <StatisticLine
-        text="positive"
-        value={`${all === 0 ? 0 : (good * 100) / all} %`}
-      />
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="all" value={all} />
+          <StatisticLine
+            text="average"
+            value={all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all}
+          />
+          <StatisticLine
+            text="positive"
+            value={`${all === 0 ? 0 : (good * 100) / all} %`}
+          />
+        </tbody>
+      </table>
     </div>
   );
 };
+
 const StatisticLine = ({ text, value }) => {
-  return <div>{`${text} ${value}`}</div>;
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  );
 };
 
 export default App;
