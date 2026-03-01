@@ -24,7 +24,7 @@ const App = () => {
     8: 0,
     9: 0,
   });
-
+  const [most, setMost] = useState(0);
   const RandomAnecdote = () => {
     const randomNumber = Math.trunc(Math.random() * 8);
     setSelected(randomNumber);
@@ -35,13 +35,22 @@ const App = () => {
     const copy = { ...votes };
     copy[selected] += 1;
     setVotes({ ...copy });
+    console.log(votes);
+    //here i am checking the vote of a new voted anecdote if it greate than the most voted one it will be assigned as the most votted
+    console.log("the vote of the new selected", copy[selected]);
+    console.log("the vote of the most voted", votes[most]);
+    if (copy[selected] > votes[most]) setMost(selected);
   };
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <div> {anecdotes[selected]}</div>
       <div>{`has ${votes[selected]} votes`}</div>
       <button onClick={Vote}>vote</button>
       <button onClick={RandomAnecdote}>next anecdote</button>
+      <h1>Anicdote with most votes</h1>
+      <div>{anecdotes[most]}</div>
+      <div>{`has ${votes[most]} votes`}</div>
     </div>
   );
 };
