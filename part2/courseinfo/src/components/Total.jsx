@@ -2,10 +2,7 @@ function Total({ course }) {
   return (
     <p>
       Number of exercises{" "}
-      {course.parts[0].exercises +
-        course.parts[1].exercises +
-        course.parts[2].exercises +
-        course.parts[3].exercises}
+      {course.parts.reduce((total, course) => (total += course.exercises), 0)}
     </p>
   );
 }
