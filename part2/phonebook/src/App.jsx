@@ -36,6 +36,7 @@ const App = () => {
         filter shown with :{" "}
         <input value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
+      <h3>add a new</h3>
       <form onSubmit={addPhonebook}>
         <div>
           name:{" "}
@@ -52,7 +53,7 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       {filteredPersons.map((person) => (
         <Phonebook key={person.id} person={person} />
       ))}
