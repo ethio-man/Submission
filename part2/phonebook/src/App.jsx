@@ -18,12 +18,18 @@ const App = () => {
   //console.log("loading...");
   const addPhonebook = async (event) => {
     event.preventDefault();
-    const isExist = persons.find((p) => p.name === newName);
-    if (isExist) {
-      alert(`${newName} is already added to phonebook`);
+    const person = persons.find((p) => p.name === newName);
+    if (person) {
+      const res = confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`,
+      );
+      if (!res) return;
+      phoneBookService
+        .change(person.id, { ...person, number: newNumber })
+        .then((response) => setPersons(...persons, response))
+        .catch((err) => console.log(err));
       setNewName("");
       setNewNumber("");
-      return;
     }
     console.log(persons[persons.length - 1]); // id of the last person
     const newId = Number(persons[persons.length - 1].id) + 1; //id of the new user we will be id of the last user + 1
@@ -39,10 +45,12 @@ const App = () => {
     setNewNumber("");
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (person) => {
+    const res = confirm(`Are you sure to delete ${person.name} user?`);
+    if (!res) return;
     phoneBookService
-      .remove(id)
-      .then((response) => setPersons(persons.filter((p) => p.id !== id)))
+      .remove(person.id)
+      .then((response) => setPersons(persons.filter((p) => p.id !== person.id)))
       .catch((err) => console.log(err));
   };
   console.log(persons);
