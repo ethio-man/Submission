@@ -21,7 +21,7 @@ const remove = (id) => {
     .catch((err) => console.log(err));
 };
 const change = (id, data) => {
-  const request = axios.update(`http://localhost:3001/persons/${id}`, data);
+  const request = axios.put(`http://localhost:3001/persons/${id}`, data);
   return request
     .then((response) => response.data)
     .catch((err) => console.log(err));

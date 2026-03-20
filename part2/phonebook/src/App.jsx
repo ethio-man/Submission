@@ -24,12 +24,19 @@ const App = () => {
         `${newName} is already added to phonebook, replace the old number with a new one?`,
       );
       if (!res) return;
+      console.log;
       phoneBookService
         .change(person.id, { ...person, number: newNumber })
-        .then((response) => setPersons(...persons, response))
+        .then((response) =>
+          setPersons([
+            ...persons.filter((p) => p.id !== response.id),
+            response,
+          ]),
+        )
         .catch((err) => console.log(err));
       setNewName("");
       setNewNumber("");
+      return;
     }
     console.log(persons[persons.length - 1]); // id of the last person
     const newId = Number(persons[persons.length - 1].id) + 1; //id of the new user we will be id of the last user + 1
