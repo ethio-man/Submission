@@ -39,6 +39,13 @@ const App = () => {
     setNewNumber("");
   };
 
+  const handleDelete = (id) => {
+    phoneBookService
+      .remove(id)
+      .then((response) => setPersons(persons.filter((p) => p.id !== id)))
+      .catch((err) => console.log(err));
+  };
+  console.log(persons);
   const filteredPersons = persons?.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
@@ -52,7 +59,7 @@ const App = () => {
       />
       <h3>Numbers</h3>
 
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} handleDelete={handleDelete} />
     </div>
   );
 };

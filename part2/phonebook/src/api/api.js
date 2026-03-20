@@ -14,4 +14,10 @@ const create = (data) => {
     .catch((error) => console.log(error));
 };
 
-export default { getAll, create };
+const remove = (id) => {
+  const request = axios.delete(`http://localhost:3001/persons/${id}`);
+  return request
+    .then((response) => response.data)
+    .catch((err) => console.log(err));
+};
+export default { getAll, create, remove };
