@@ -29,6 +29,11 @@
       "id": "6",
       "name": "fhg",
       "number": "3456"
+    },
+    {
+      "id": "7",
+      "name": "sd",
+      "number": "4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

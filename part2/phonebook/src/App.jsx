@@ -1,20 +1,15 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import phoneBookService from "./api/api.js";
 import { PersonForm } from "./components/PersonForm.jsx";
 import { Filter } from "./components/Filter.jsx";
 import { Persons } from "./components/Persons.jsx";
 const App = () => {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const persons = await axios.get("http://localhost:3001/persons");
-        setPersons(persons.data);
-      } catch (err) {
-        console.log("Error to fetch data.", err);
-      }
-    }
-    fetchData();
+    phoneBookService
+      .getAll()
+      .then((initialData) => setPersons(initialData))
+      .catch((err) => console.log(err));
   }, []);
   const [search, setSearch] = useState("");
   const [newName, setNewName] = useState("");
@@ -39,12 +34,12 @@ const App = () => {
       id: String(newId),
     };
     setPersons(persons.concat(newPerson));
-    const res = await axios.post("http://localhost:3001/persons", newPerson);
+    await phoneBookService.create(newPerson);
     setNewName("");
     setNewNumber("");
   };
 
-  const filteredPersons = persons.filter((p) =>
+  const filteredPersons = persons?.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
   return (
