@@ -21,7 +21,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
 
   //console.log("loading...");
-  const addPhonebook = (event) => {
+  const addPhonebook = async (event) => {
     event.preventDefault();
     const isExist = persons.find((p) => p.name === newName);
     if (isExist) {
@@ -31,13 +31,15 @@ const App = () => {
       return;
     }
     console.log(persons[persons.length - 1]); // id of the last person
-    setPersons(
-      persons.concat({
-        name: newName,
-        number: newNumber,
-        id: persons[persons.length - 1].id + 1, //id of the new user we be id of the last user + 1
-      }),
-    );
+    const newId = Number(persons[persons.length - 1].id) + 1;
+    console.log(newId);
+    const newPerson = {
+      name: newName,
+      number: newNumber,
+      id: String(newId), //id of the new user we be id of the last user + 1
+    };
+    setPersons(persons.concat(newPerson));
+    const res = await axios.post("http://localhost:3001/persons", newPerson);
     setNewName("");
     setNewNumber("");
   };
