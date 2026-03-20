@@ -31,12 +31,12 @@ const App = () => {
       return;
     }
     console.log(persons[persons.length - 1]); // id of the last person
-    const newId = Number(persons[persons.length - 1].id) + 1;
+    const newId = Number(persons[persons.length - 1].id) + 1; //id of the new user we will be id of the last user + 1
     console.log(newId);
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: String(newId), //id of the new user we be id of the last user + 1
+      id: String(newId),
     };
     setPersons(persons.concat(newPerson));
     const res = await axios.post("http://localhost:3001/persons", newPerson);
