@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import phoneBookService from "./api/api.js";
 import { PersonForm } from "./components/PersonForm.jsx";
+import Notification from "./components/Notification.jsx";
 import { Filter } from "./components/Filter.jsx";
 import { Persons } from "./components/Persons.jsx";
 const App = () => {
@@ -14,25 +15,31 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-
+  const [message, setMessage] = useState(null);
   //console.log("loading...");
-  const addPhonebook = async (event) => {
+  const addPhonebook = (event) => {
     event.preventDefault();
     const person = persons.find((p) => p.name === newName);
+    //requesting user confirmation
     if (person) {
       const res = confirm(
         `${newName} is already added to phonebook, replace the old number with a new one?`,
       );
       if (!res) return;
-      console.log;
+
+      //updating already exit user data
       phoneBookService
         .change(person.id, { ...person, number: newNumber })
-        .then((response) =>
+        .then((response) => {
           setPersons([
             ...persons.filter((p) => p.id !== response.id),
             response,
-          ]),
-        )
+          ]);
+          setMessage(`${response.name}'s number is updated successfully!`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
         .catch((err) => console.log(err));
       setNewName("");
       setNewNumber("");
@@ -46,8 +53,13 @@ const App = () => {
       number: newNumber,
       id: String(newId),
     };
-    setPersons(persons.concat(newPerson));
-    await phoneBookService.create(newPerson);
+    phoneBookService.create(newPerson).then((response) => {
+      setPersons(persons.concat(response));
+      setMessage(`${response.name} is added successfully!`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+    });
     setNewName("");
     setNewNumber("");
   };
@@ -64,9 +76,11 @@ const App = () => {
   const filteredPersons = persons?.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter search={search} setSearch={setSearch} />
       <h3>add a new</h3>
       <PersonForm
