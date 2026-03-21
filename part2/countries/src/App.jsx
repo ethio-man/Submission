@@ -35,7 +35,12 @@ function App() {
       </p>
       {1 < information.length &&
         information.length < 10 &&
-        information.map((c) => <p>{c.name.common}</p>)}
+        information.map((c, i) => (
+          <p key={i}>
+            {`${c.name.common}     `}
+            <button onClick={() => setInformation([c])}>show</button>
+          </p>
+        ))}
       {information.length === 1 && (
         <div>
           <h1>{information[0]?.name?.common}</h1>
