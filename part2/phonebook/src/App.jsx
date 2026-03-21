@@ -16,12 +16,14 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [message, setMessage] = useState(null);
+  const [error, setError] = useState(false);
   //console.log("loading...");
   const addPhonebook = (event) => {
     event.preventDefault();
     const person = persons.find((p) => p.name === newName);
-    //requesting user confirmation
+
     if (person) {
+      //requesting user confirmation
       const res = confirm(
         `${newName} is already added to phonebook, replace the old number with a new one?`,
       );
@@ -40,7 +42,15 @@ const App = () => {
             setMessage(null);
           }, 5000);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setMessage(`Information of ${person.name} is already been cleared`);
+          setError(true);
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setTimeout(() => {
+            setMessage(null);
+            setError(false);
+          }, 5000);
+        });
       setNewName("");
       setNewNumber("");
       return;
@@ -80,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} error={error} />
       <Filter search={search} setSearch={setSearch} />
       <h3>add a new</h3>
       <PersonForm
