@@ -5,7 +5,7 @@ function App() {
   const API_key = import.meta.env.VITE_WEATHER_API;
   const [countries, setCountries] = useState("");
   const [information, setInformation] = useState([]);
-  const [weather, setWeather] = useState([]);
+  const [weather, setWeather] = useState(null);
   const [location, setLocation] = useState([]);
   const [temprature, setTemprature] = useState(null);
   useEffect(() => {
@@ -21,32 +21,34 @@ function App() {
 
   useEffect(() => {
     if (information.length === 1) {
-      const city = information[0]?.capital;
-      //searching city's cooardinate for weather api call
+      const city = information[0]?.capital?.[0]; // capital is an array
+
+      if (!city) return;
+
       axios
         .get(
-          `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_key}`,
+          `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`,
         )
-        .then((response) =>
-          setLocation([response.data[0].lat, response.data[0].lon]),
-        )
-        .catch((err) => console.log(err));
-      //searching city's weather condition useing it's coordinate
-      const lat = location[0];
-      const lon = location[1];
-      if (lat && lon) {
-        axios
-          .get(
+        .then((geoRes) => {
+          const lat = geoRes.data[0]?.lat;
+          const lon = geoRes.data[0]?.lon;
+
+          if (!lat || !lon) return;
+
+          return axios.get(
             `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}`,
-          )
-          .then((response) => {
-            setWeather(response.data);
-            setTemprature(response.data?.main?.temp - 273.15);
-          })
-          .catch((err) => console.log(err));
-      }
+          );
+        })
+        .then((weatherRes) => {
+          if (!weatherRes) return;
+
+          setWeather(weatherRes.data);
+          setTemprature(weatherRes.data.main.temp - 273.15);
+        })
+        .catch((err) => console.log("Weather error:", err));
     }
   }, [information]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     const filtered = countries?.filter((c) => {
@@ -93,8 +95,18 @@ function App() {
             src={information[0]?.flags?.png}
             alt={information?.name?.common}
           />
-          <h2>Weather in {information[0]?.capital}</h2>
-          <p>Temperature {temprature?.toFixed(2)}</p>
+          {weather ? (
+            <div>
+              <h2>Weather in {information[0]?.capital}</h2>
+              <p>Temperature {temprature?.toFixed(2)}</p>
+              <img
+                src={`https://openweathermap.org/payload/api/media/file/${weather && weather.weather[0]?.icon}.png`}
+              />
+              <p>Wind {weather?.wind?.speed} m/s</p>
+            </div>
+          ) : (
+            <p>Loading weather...</p>
+          )}
         </div>
       )}
     </div>
